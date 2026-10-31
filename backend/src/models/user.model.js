@@ -4,19 +4,19 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      require: true,
+      required: true,
       minLength: 3,
       maxLength: 20,
     },
     lastName: {
       type: String,
-      require: true,
+      required: true,
       minLength: 3,
       maxLength: 20,
     },
     emailId: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
       trim: true,
       lowercase: true,
@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema(
     },
     problemsSolved: {
       type: [String],
+    },
+    password: {
+      type: String,
+      required: true,
     },
   },
   {
