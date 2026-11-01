@@ -1,11 +1,12 @@
 import express from "express";
+import validateAdmin from "../middlewares/validateAdmin.middleware.js";
 
 const problemRouter = express.Router();
 
 // These routes can only be accessed by admin
-problemRouter.post("/createProblem", createProblem);
-problemRouter.patch("/:id", updateProblem);
-problemRouter.delete("/:id", deleteProblem);
+problemRouter.post("/createProblem", validateAdmin, createProblem);
+problemRouter.patch("/:id", validateAdmin, updateProblem);
+problemRouter.delete("/:id", validateAdmin, deleteProblem);
 
 // These routes can be accessed by any user
 problemRouter.get("/:id", getProblem);
