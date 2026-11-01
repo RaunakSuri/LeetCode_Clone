@@ -22,3 +22,5 @@ const submitBatch = async (submissions) => {
   }
   return await fetchData();
 };
+
+export { submitBatch };
