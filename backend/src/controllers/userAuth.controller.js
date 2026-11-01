@@ -65,7 +65,7 @@ const logout = async (req, res) => {
     await redisClient.set(`token:${token}`, "Blocked");
     await redisClient.expireAt(`token:${token}`, payload.exp);
 
-    res.cookie("token", null, {expires: new Date(Date.now())});
+    res.cookie("token", null, { expires: new Date(Date.now()) });
     res.status(200).send("User Logged Out Successfully");
   } catch (error) {
     res.status(503).send(`Error Encountered: ${error}`);
