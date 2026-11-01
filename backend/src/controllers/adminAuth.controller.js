@@ -72,4 +72,4 @@ const logout = async (req, res) => {
   }
 };
 
-export { register };
+export { register, login, logout };
