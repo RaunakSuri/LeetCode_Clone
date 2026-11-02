@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const waiting = async (timer) => {
-  setTimeout(() => {
-    return 1;
-  }, timer);
+const waiting = (timer) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timer);
+  });
 };
 
 const submitBatch = async (submissions) => {
@@ -25,6 +25,7 @@ const submitBatch = async (submissions) => {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
   return await fetchData();
@@ -36,7 +37,7 @@ const submitToken = async (resultToken) => {
     url: "https://api.onlinecompiler.io/api/judge0/submissions/batch",
     params: {
       tokens: resultToken.join(","),
-      fields: "token,stdout,stderr,compile_output,status,time,memory",
+      fields: "token,stdout,stderr,compile_output,status_id,time,memory",
     },
     headers: {
       "X-Auth-Token": process.env.JUDGE0_API,
@@ -49,6 +50,7 @@ const submitToken = async (resultToken) => {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
