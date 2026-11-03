@@ -141,7 +141,9 @@ const getProblem = async (req, res) => {
     if (!id) {
       return res.status(404).send("Problem ID Not Defined");
     }
-    const getProblem = await Problem.findById(id);
+    const getProblem = await Problem.findById(id).select(
+      "_id title description difficulty tags visibleTestCases startCode referenceSolution",
+    );
     if (!getProblem) {
       return res.status(404).send("Problem Does Not Exist");
     }
@@ -153,7 +155,9 @@ const getProblem = async (req, res) => {
 
 const getAllProblems = async (req, res) => {
   try {
-    const getProblem = await Problem.find({});
+    const getProblem = await Problem.find({}).select(
+      "_id title difficulty tags",
+    );
     if (getProblem.length === 0) {
       return res.status(404).send("Problems Do Not Exist");
     }
@@ -163,9 +167,7 @@ const getAllProblems = async (req, res) => {
   }
 };
 
-const getSolvedProblems = async (req, res) => {
-  
-}
+const getSolvedProblems = async (req, res) => {};
 
 export {
   createProblem,

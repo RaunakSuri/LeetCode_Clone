@@ -19,6 +19,6 @@ problemRouter.delete("/delete/:id", validateAdmin, deleteProblem);
 // // These routes can be accessed by any user
 problemRouter.get("/getProblem/:id", validateUser, getProblem);
 problemRouter.get("/getAllProblems", validateUser, getAllProblems);
-problemRouter.get("/solved", validateUser, getSolvedProblems);
+// problemRouter.get("/solved", validateUser, getSolvedProblems);
 
 export { problemRouter };

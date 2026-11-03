@@ -15,8 +15,8 @@ const validateUser = async (req, res, next) => {
       throw new Error("Invalid Token");
     }
 
-    const user = await User.findById(_id);
-    if (!user) {
+    const result = await User.findById(_id);
+    if (!result) {
       throw new Error("User Does Not Exist");
     }
 

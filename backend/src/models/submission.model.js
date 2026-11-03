@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
 
-const submissionSchema = new Schema(
+const submissionSchema = new mongoose.Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -53,3 +52,5 @@ const submissionSchema = new Schema(
     timestamps: true,
   },
 );
+
+export const Submission = mongoose.model("Submission", submissionSchema);
