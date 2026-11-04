@@ -1,10 +1,10 @@
-import Problem from "../models/problem.model.js";
-import Submission from "../models/submission.model.js";
+import { Problem } from "../models/problem.model.js";
+import { Submission } from "../models/submission.model.js";
 import { submitBatch, submitToken } from "../utils/problem.util.js";
 
 const submitCode = async (req, res) => {
   try {
-    const { userId } = req.result._id;
+    const userId = req.result._id;
     const problemId = req.params.id;
     const { code, language } = req.body;
     if (!userId || !problemId || !language) {
@@ -15,7 +15,7 @@ const submitCode = async (req, res) => {
     const problem = await Problem.findById(problemId);
     // Before sending the code to JudgeO we will store it in DB because incase some error happens then the code will not get lost.
 
-    const submittedResult = await Submission.create({
+    let submittedResult = await Submission.create({
       userId,
       problemId,
       code,
@@ -65,17 +65,16 @@ const submitCode = async (req, res) => {
           errorMessage = test.stderr;
         }
       }
-
-      submittedResult.status = status;
-      submittedResult.testCasesPassed = testCasesPassed;
-      submittedResult.errorMessage = errorMessage;
-      submittedResult.status = status;
-      submittedResult.runTime = runTime;
-      submittedResult.memory = memory;
-      await submittedResult.save();
-
-      res.status(201).send(submittedResult);
     }
+    submittedResult.status = status;
+    submittedResult.testCasesPassed = testCasesPassed;
+    submittedResult.errorMessage = errorMessage;
+    submittedResult.status = status;
+    submittedResult.runtime = runTime;
+    submittedResult.memory = memory;
+    await submittedResult.save();
+
+    res.status(201).send(submittedResult);
   } catch (error) {
     res.status(500).send(`Error Encountered : ${error}`);
   }

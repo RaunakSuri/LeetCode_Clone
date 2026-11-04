@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const submissionSchema = new mongoose.Schema(
   {
@@ -19,7 +19,7 @@ const submissionSchema = new mongoose.Schema(
     language: {
       type: String,
       required: true,
-      enum: ["javascript", "cpp", "java"],
+      enum: ["javascript", "c++", "python", "java"],
     },
     status: {
       type: String,
