@@ -1,5 +1,6 @@
 import { submitBatch, submitToken } from "../utils/problem.util.js";
 import { Problem } from "../models/problem.model.js";
+import { User } from "../models/user.model.js";
 
 const createProblem = async (req, res) => {
   try {
@@ -167,7 +168,18 @@ const getAllProblems = async (req, res) => {
   }
 };
 
-const getSolvedProblems = async (req, res) => {};
+const getSolvedProblems = async (req, res) => {
+  try {
+    const userId = req.result._id;
+    const user = await User.findById(userId).populate({
+      path: "problemsSolved",
+      select: "_id title difficulty tags",
+    });
+    res.status(200).send(user.problemsSolved);
+  } catch (error) {
+    res.status(500).send(`Error Encountered : ${error}`);
+  }
+};
 
 export {
   createProblem,
@@ -175,4 +187,5 @@ export {
   deleteProblem,
   getProblem,
   getAllProblems,
+  getSolvedProblems,
 };

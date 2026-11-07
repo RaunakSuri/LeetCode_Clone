@@ -1,5 +1,6 @@
 import { Problem } from "../models/problem.model.js";
 import { Submission } from "../models/submission.model.js";
+import { User } from "../models/user.model.js";
 import { submitBatch, submitToken } from "../utils/problem.util.js";
 
 const submitCode = async (req, res) => {
@@ -74,10 +75,55 @@ const submitCode = async (req, res) => {
     submittedResult.memory = memory;
     await submittedResult.save();
 
+    // Now we have created the submission for this particular problem and now we will check whether this particular user has already submitted the solution for this problem and if not then we will add this problemId in the problemsSolved array
+
+    if (!req.result.problemsSolved.includes(problemId)) {
+      req.result.problemsSolved.push(problemId);
+      await req.result.save();
+    }
     res.status(201).send(submittedResult);
   } catch (error) {
     res.status(500).send(`Error Encountered : ${error}`);
   }
 };
 
-export { submitCode };
+const runCode = async (req, res) => {
+  try {
+    const userId = req.result._id;
+    const problemId = req.params.id;
+    const { code, language } = req.body;
+    if (!userId || !problemId || !language) {
+      return res.status(400).send("All Fields are Required");
+    }
+
+    // Fetch the problem from DB
+    const problem = await Problem.findById(problemId);
+
+    // Now we will submit the code to JudgeO
+    const languageArr = {
+      "c++": 54,
+      java: 62,
+      python: 71,
+      javascript: 63,
+    };
+    const languageId = languageArr[language.toLowerCase()];
+    const submissions = problem.visibleTestCases.map((testCase, index) => ({
+      source_code: code,
+      language_id: languageId,
+      stdin: testCase.input,
+      expected_output: testCase.output,
+    }));
+
+    const submitResult = await submitBatch(submissions);
+    const resultToken = submitResult.map((value) => value.token);
+    const testResult = await submitToken(resultToken);
+
+    // Now abb we have got the test results about how the code performed now we need to update the already created submittedResult to store the performance of the code
+
+    res.status(201).send(testResult);
+  } catch (error) {
+    res.status(500).send(`Error Encountered : ${error}`);
+  }
+};
+
+export { submitCode, runCode };

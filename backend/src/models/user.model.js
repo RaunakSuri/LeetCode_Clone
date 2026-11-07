@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -31,9 +31,13 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    problemsSolved: {
-      type: [String],
-    },
+    problemsSolved: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Problem",
+        unique: true,
+      },
+    ],
     password: {
       type: String,
       required: true,
