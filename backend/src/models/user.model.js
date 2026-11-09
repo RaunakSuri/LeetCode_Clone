@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { Submission } from "./submission.model";
 
 const userSchema = new mongoose.Schema(
   {
