@@ -10,8 +10,11 @@ userAuthRouter.post("/register", register);
 // Login
 userAuthRouter.post("/login", login);
 
-// // Logout
+// Logout
 userAuthRouter.post("/logout", validateUser, logout);
+
+// Delete Profile
+userAuthRouter.delete("/deleteProfile", validateUser, deleteProfile);
 
 // // GetProfile
 // authRouter.post("/getProfile", getProfile);

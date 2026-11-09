@@ -1,5 +1,6 @@
 import { submitBatch, submitToken } from "../utils/problem.util.js";
 import { Problem } from "../models/problem.model.js";
+import { Submissions } from "../models/submission.model.js";
 import { User } from "../models/user.model.js";
 
 const createProblem = async (req, res) => {
@@ -181,6 +182,23 @@ const getSolvedProblems = async (req, res) => {
   }
 };
 
+const submittedSolutions = async (req, res) => {
+  try {
+    const userId = req.result._id;
+    const problemId = req.params.pid;
+
+    const ans = await Submissions.find({ userId, problemId });
+    if (ans.length == 0) {
+      res
+        .status(200)
+        .send("User has not made any submissions for this problem");
+    }
+    res.status(200).send(ans);
+  } catch (error) {
+    res.status(500).send(`Error Encountered : ${error}`);
+  }
+};
+
 export {
   createProblem,
   updateProblem,
@@ -188,4 +206,5 @@ export {
   getProblem,
   getAllProblems,
   getSolvedProblems,
+  submittedSolutions,
 };

@@ -48,4 +48,10 @@ const userSchema = new mongoose.Schema(
   },
 );
 
+userSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await mongoose.model("Submission").deleteMany({ userId: doc._id });
+  }
+});
+
 export const User = mongoose.model("User", userSchema);

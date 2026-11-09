@@ -1,5 +1,6 @@
 import { redisClient } from "../db/redis.js";
 import { User } from "../models/user.model.js";
+import { Submission } from "../models/submission.model.js";
 import { validate } from "../utils/validate.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -72,4 +73,19 @@ const logout = async (req, res) => {
   }
 };
 
-export { register, login, logout };
+const deleteProfile = async (req, res) => {
+  try {
+    const userId = req.result._id;
+
+    // Here we have deleted the user from DB
+    await User.findByIdAndDelete(userId);
+
+    // Now we need to delete the submissions made by the user
+    // await Submission.deleteMany({ userId });     --> We are handling this directly in userSchema using post method.
+    res.status(200).send("User Deleted Successfully");
+  } catch (error) {
+    res.status(500).send(`Error Encountered : ${error}`);
+  }
+};
+
+export { register, login, logout, deleteProfile };

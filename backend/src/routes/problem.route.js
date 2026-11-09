@@ -8,6 +8,7 @@ import {
   getProblem,
   getAllProblems,
   getSolvedProblems,
+  submittedSolutions,
 } from "../controllers/problem.controller.js";
 
 const problemRouter = express.Router();
@@ -21,5 +22,6 @@ problemRouter.delete("/delete/:id", validateAdmin, deleteProblem);
 problemRouter.get("/getProblem/:id", validateUser, getProblem);
 problemRouter.get("/getAllProblems", validateUser, getAllProblems);
 problemRouter.get("/solved", validateUser, getSolvedProblems);
+problemRouter.get("/submittedSolutions", validateUser, submittedSolutions);
 
 export { problemRouter };
